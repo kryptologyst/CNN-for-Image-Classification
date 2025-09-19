@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CIFAR-10 Image Classification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">CIFAR-10 Image Classification</h1>
+        <p class="lead">Upload an image to classify it into one of the 10 CIFAR-10 categories.</p>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Upload Image</h5>
+                <form id="upload-form" action="/predict" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" id="imageUpload" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Classify</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="result" class="mt-4">
+            <!-- Prediction will be displayed here -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#upload-form').on('submit', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: '/predict',
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        $('#result').html('<h3>Prediction: ' + data + '</h3>');
+                    },
+                });
+            });
+        });
+    </script>
+</body>
+</html>
